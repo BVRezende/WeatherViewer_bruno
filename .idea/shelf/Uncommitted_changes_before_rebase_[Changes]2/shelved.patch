@@ -1,0 +1,413 @@
+Index: WeatherViewer/WeatherViewer/README.md
+===================================================================
+diff --git a/WeatherViewer/WeatherViewer/README.md b/WeatherViewer/WeatherViewer/README.md
+deleted file mode 100644
+--- a/WeatherViewer/WeatherViewer/README.md	(revision dfdfe35d0f970a8f115d8bc89df8582f839eb364)
++++ /dev/null	(revision dfdfe35d0f970a8f115d8bc89df8582f839eb364)
+@@ -1,89 +0,0 @@
+-# WeatherViewer 🌦️
+-
+-
+-
+-Aplicação Android nativa para consulta de previsão do tempo, desenvolvida como atividade prática da disciplina de Programação III.
+-
+-
+-
+-Este projeto é uma adaptação moderna do "WeatherViewer App" (Capítulo 7 do livro *Android for Programmers*), ajustado para consumir uma API REST personalizada hospedada na AWS.
+-
+-
+-
+-## 👨‍🎓 Identificação do Aluno
+-
+-
+-
+-* **Nome:** Guilherme Reis Pereira
+-
+-* **Instituição:** UEMG - Unidade Passos
+-
+-* **Curso:** Sistemas de Informação
+-
+-* **Disciplina:** Programação III
+-
+-* **Semestre:** 2025/02
+-
+-
+-
+-## 📱 Sobre o Projeto
+-
+-
+-
+-O aplicativo permite que o usuário consulte a previsão do tempo para os próximos 7 dias de qualquer cidade. Ele demonstra conceitos fundamentais de desenvolvimento Android, incluindo:
+-
+-
+-
+-* **Networking:** Consumo de Web Service REST (JSON) utilizando `HttpUrlConnection`.
+-
+-* **Multithreading:** Execução de tarefas em background com `AsyncTask` para não travar a UI.
+-
+-* **JSON Parsing:** Processamento de dados complexos com `JSONObject` e `JSONArray`.
+-
+-* **UI/UX:**
+-
+-    * Uso de `ListView` com `ArrayAdapter` personalizado e padrão ViewHolder.
+-
+-    * Tratamento de erros robusto (distinção entre "Sem Internet" e "Cidade não encontrada").
+-
+-    * Feedback visual de carregamento (`ProgressBar`).
+-
+-    * Design Material com `TextInputLayout` e `FloatingActionButton`.
+-
+-    * Barra de status personalizada.
+-
+-
+-
+-## 🛠️ Configuração e Execução (Método Seguro)
+-
+-
+-
+-Como medida de segurança ("Software Engineering Observation 7.1"), a Chave da API **não** foi incluída no controle de versão. Para executar o projeto, siga os passos:
+-
+-
+-
+-1.  Clone este repositório.
+-
+-2.  Abra o projeto no Android Studio.
+-
+-3.  Crie um arquivo chamado `local.properties` na raiz do projeto (caso não exista).
+-
+-4.  Adicione a seguinte linha ao arquivo `local.properties`:
+-
+-
+-
+-```properties
+-
+-WEATHER_API_KEY=AgentWeather2024_a8f3b9c1d7e2f5g6h4i9j0k1l2m3n4o5p6;
+-```
+-
+-
+-Ou troque no MainActivity.java:
+-
+-```properties
+-private final String API_KEY = BuildConfig.API_KEY;
+-```
+-Por
+-```properties
+-private final String API_KEY = "AgentWeather2024_a8f3b9c1d7e2f5g6h4i9j0k1l2m3n4o5p6";
+-```
+Index: WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/Weather.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weatherviewer; // Verifique se o pacote é o mesmo do seu projeto\r\n\r\nimport java.text.NumberFormat;\r\nimport java.util.Locale;\r\n\r\npublic class Weather {\r\n    public final String dayOfWeek;\r\n    public final String minTemp;\r\n    public final String maxTemp;\r\n    public final String humidity;\r\n    public final String description;\r\n    public final String icon; // Agora é uma String (emoji), não uma URL\r\n\r\n    // Construtor atualizado para o JSON da atividade\r\n    public Weather(String dateString, double minTemp, double maxTemp, double humidity, String description, String icon) {\r\n        // A API retorna a data pronta (ex: \"2025-11-26\"), vamos usá-la direto ou formatar se preferir\r\n        this.dayOfWeek = dateString;\r\n\r\n        // Formatadores numéricos\r\n        NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());\r\n        numberFormat.setMaximumFractionDigits(0);\r\n        NumberFormat percentFormat = NumberFormat.getPercentInstance(Locale.getDefault());\r\n\r\n        // Configuração das Strings para exibição (Adicionando °C conforme instrução )\r\n        this.minTemp = numberFormat.format(minTemp) + \"\\u00B0C\";\r\n        this.maxTemp = numberFormat.format(maxTemp) + \"\\u00B0C\";\r\n        this.humidity = NumberFormat.getPercentInstance().format(humidity); // API retorna 0.75 para 75%\r\n        this.description = description;\r\n        this.icon = icon; // Emoji retornado diretamente pelo JSON\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/Weather.java b/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/Weather.java
+--- a/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/Weather.java	(revision dfdfe35d0f970a8f115d8bc89df8582f839eb364)
++++ b/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/Weather.java	(date 1765414059890)
+@@ -1,4 +1,4 @@
+-package com.example.weatherviewer; // Verifique se o pacote é o mesmo do seu projeto
++package com.example.weatherviewer; // Verifique se o pacote e o mesmo do seu projeto
+ 
+ import java.text.NumberFormat;
+ import java.util.Locale;
+@@ -9,19 +9,19 @@
+     public final String maxTemp;
+     public final String humidity;
+     public final String description;
+-    public final String icon; // Agora é uma String (emoji), não uma URL
++    public final String icon; // Agora e uma String (emoji), nao uma URL
+ 
+     // Construtor atualizado para o JSON da atividade
+     public Weather(String dateString, double minTemp, double maxTemp, double humidity, String description, String icon) {
+         // A API retorna a data pronta (ex: "2025-11-26"), vamos usá-la direto ou formatar se preferir
+         this.dayOfWeek = dateString;
+ 
+-        // Formatadores numéricos
++        // Formatadores numericos
+         NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());
+         numberFormat.setMaximumFractionDigits(0);
+         NumberFormat percentFormat = NumberFormat.getPercentInstance(Locale.getDefault());
+ 
+-        // Configuração das Strings para exibição (Adicionando °C conforme instrução )
++        // Configuracao das Strings para exibicao (Adicionando °C conforme instrucao )
+         this.minTemp = numberFormat.format(minTemp) + "\u00B0C";
+         this.maxTemp = numberFormat.format(maxTemp) + "\u00B0C";
+         this.humidity = NumberFormat.getPercentInstance().format(humidity); // API retorna 0.75 para 75%
+Index: WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weatherviewer;\r\n\r\n// Importações necessárias para UI, Rede e Processamento de Dados\r\nimport android.app.AlertDialog;\r\nimport android.content.Context;\r\nimport android.os.AsyncTask;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.view.Window;\r\nimport android.view.WindowManager;\r\nimport android.view.inputmethod.InputMethodManager;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.ListView;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.BufferedReader;\r\nimport java.io.IOException;\r\nimport java.io.InputStreamReader;\r\nimport java.net.HttpURLConnection;\r\nimport java.net.URL;\r\nimport java.net.URLEncoder;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n/**\r\n * MainActivity: Classe principal que gerencia a interface do usuário e a lógica do aplicativo.\r\n * Responsável por buscar a previsão do tempo e exibi-la em uma lista.\r\n */\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    // Lista que armazenará os objetos Weather (cada dia da previsão)\r\n    private List<Weather> weatherList = new ArrayList<>();\r\n\r\n    // Adaptador para conectar a lista de dados (weatherList) ao componente visual (ListView)\r\n    private WeatherArrayAdapter weatherArrayAdapter;\r\n    private ListView weatherListView;\r\n\r\n    // Campo de texto para entrada da cidade\r\n    private EditText locationEditText;\r\n\r\n    // Componentes da tela de erro (Layout, Mensagem e Ícone)\r\n    private LinearLayout errorLayout;\r\n    private TextView errorMessage;\r\n    private ImageView errorIcon;\r\n\r\n    // Configurações da API (Chave e URL Base)\r\n    private final String API_KEY = BuildConfig.API_KEY;\r\n    private final String BASE_URL = \"http://agent-weathermap-env-env.eba-6pzgqekp.us-east-2.elasticbeanstalk.com/api/weather\";\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main); // Define o layout da tela\r\n\r\n\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {\r\n            Window window = getWindow();\r\n\r\n            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);\r\n\r\n            window.setStatusBarColor(getResources().getColor(R.color.weather_blue_dark));\r\n\r\n            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {\r\n                View decor = window.getDecorView();\r\n                decor.setSystemUiVisibility(decor.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);\r\n            }\r\n        }\r\n\r\n        weatherListView = findViewById(R.id.weatherListView);\r\n        locationEditText = findViewById(R.id.locationEditText);\r\n        errorLayout = findViewById(R.id.errorLayout);\r\n        errorMessage = findViewById(R.id.errorMessage);\r\n        errorIcon = findViewById(R.id.errorIcon);\r\n        FloatingActionButton fab = findViewById(R.id.fab);\r\n\r\n        // Inicializa o adaptador e conecta à ListView\r\n        weatherArrayAdapter = new WeatherArrayAdapter(this, weatherList);\r\n        weatherListView.setAdapter(weatherArrayAdapter);\r\n\r\n        // Configura o ouvinte de clique do botão de pesquisa (FAB)\r\n        fab.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                // Obtém o texto digitado\r\n                String city = locationEditText.getText().toString();\r\n\r\n                if (!city.isEmpty()) {\r\n                    // Cria a URL da requisição\r\n                    URL url = createURL(city);\r\n\r\n                    if (url != null) {\r\n                        dismissKeyboard(locationEditText); // Esconde o teclado\r\n\r\n                        // Reseta a interface: esconde erro e mostra lista\r\n                        errorLayout.setVisibility(View.GONE);\r\n                        weatherListView.setVisibility(View.VISIBLE);\r\n\r\n                        // Inicia a tarefa assíncrona para baixar os dados\r\n                        new GetWeatherTask().execute(url);\r\n                    }\r\n                } else {\r\n                    // Feedback visual caso o campo esteja vazio\r\n                    Toast.makeText(MainActivity.this, \"Digite uma cidade\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    // Método utilitário para esconder o teclado virtual\r\n    private void dismissKeyboard(View view) {\r\n        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);\r\n        if (imm != null) {\r\n            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);\r\n        }\r\n    }\r\n\r\n    // Método que constrói a URL formatada para a API\r\n    private URL createURL(String city) {\r\n        try {\r\n            // Codifica o nome da cidade (ex: espaços viram %20) para ser válido na URL\r\n            String urlString = BASE_URL + \"?city=\" + URLEncoder.encode(city, \"UTF-8\")\r\n                    + \"&days=7\" // Solicita 7 dias de previsão\r\n                    + \"&APPID=\" + API_KEY; // Adiciona a chave de autenticação\r\n            return new URL(urlString);\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n        return null;\r\n    }\r\n\r\n    /**\r\n     * GetWeatherTask: Classe interna para realizar operações de rede em uma Thread separada (Background).\r\n     * Evita travar a interface do usuário durante o download.\r\n     */\r\n    private class GetWeatherTask extends AsyncTask<URL, Void, JSONObject> {\r\n        private AlertDialog progressDialog; // Pop-up de \"Carregando...\"\r\n\r\n        // Variáveis de controle de erro\r\n        private boolean isConnectionError = false;\r\n        private int lastResponseCode = -1;\r\n\r\n        // Executado na Thread Principal ANTES do download começar\r\n        @Override\r\n        protected void onPreExecute() {\r\n            super.onPreExecute();\r\n            isConnectionError = false;\r\n            lastResponseCode = -1;\r\n\r\n            // Configura e mostra o diálogo de progresso\r\n            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);\r\n            builder.setMessage(\"Buscando previsão...\");\r\n            builder.setCancelable(false); // Impede cancelamento pelo usuário\r\n\r\n            // Adiciona uma barra de progresso circular (spinner)\r\n            ProgressBar loadingSpinner = new ProgressBar(MainActivity.this);\r\n            loadingSpinner.setPadding(20, 20, 20, 20);\r\n            builder.setView(loadingSpinner);\r\n\r\n            progressDialog = builder.create();\r\n            progressDialog.show();\r\n        }\r\n\r\n        // Executado em uma Thread Secundária (Background)\r\n        @Override\r\n        protected JSONObject doInBackground(URL... params) {\r\n            HttpURLConnection connection = null;\r\n            try {\r\n                // Abre a conexão HTTP\r\n                connection = (HttpURLConnection) params[0].openConnection();\r\n\r\n                // Obtém o código de resposta (Ex: 200 OK, 404 Not Found)\r\n                lastResponseCode = connection.getResponseCode();\r\n                Log.d(\"API_DEBUG\", \"Código HTTP: \" + lastResponseCode);\r\n\r\n                // Se a resposta for 200 (OK), lê os dados\r\n                if (lastResponseCode == HttpURLConnection.HTTP_OK) {\r\n                    StringBuilder builder = new StringBuilder();\r\n                    try (BufferedReader reader = new BufferedReader(\r\n                            new InputStreamReader(connection.getInputStream()))) {\r\n                        String line;\r\n                        while ((line = reader.readLine()) != null) {\r\n                            builder.append(line);\r\n                        }\r\n                    }\r\n                    // Retorna os dados como um Objeto JSON\r\n                    return new JSONObject(builder.toString());\r\n                }\r\n            } catch (IOException e) {\r\n                // Captura erros de rede (ex: sem internet)\r\n                isConnectionError = true;\r\n                e.printStackTrace();\r\n            } catch (Exception e) {\r\n                e.printStackTrace();\r\n            } finally {\r\n                // Garante que a conexão seja fechada\r\n                if (connection != null) connection.disconnect();\r\n            }\r\n            return null;\r\n        }\r\n\r\n        // Executado na Thread Principal DEPOIS do download terminar\r\n        @Override\r\n        protected void onPostExecute(JSONObject weather) {\r\n            // Fecha o diálogo de progresso\r\n            if (progressDialog != null && progressDialog.isShowing()) {\r\n                progressDialog.dismiss();\r\n            }\r\n\r\n            // Limpa dados antigos da lista\r\n            weatherList.clear();\r\n            weatherArrayAdapter.notifyDataSetChanged();\r\n\r\n            if (weather != null) {\r\n                // CASO DE SUCESSO: Mostra a lista e processa o JSON\r\n                weatherListView.setVisibility(View.VISIBLE);\r\n                errorLayout.setVisibility(View.GONE);\r\n\r\n                convertJSONtoArrayList(weather); // Converte JSON para Objetos Weather\r\n                weatherArrayAdapter.notifyDataSetChanged(); // Atualiza a UI\r\n                weatherListView.smoothScrollToPosition(0); // Volta ao topo da lista\r\n                Toast.makeText(MainActivity.this, \"Previsão atualizada!\", Toast.LENGTH_SHORT).show();\r\n\r\n            } else {\r\n                // CASO DE FALHA: Mostra a tela de erro\r\n                weatherListView.setVisibility(View.GONE);\r\n                errorLayout.setVisibility(View.VISIBLE);\r\n\r\n                if (isConnectionError) {\r\n                    // Erro 1: Falha na conexão (Internet)\r\n                    errorIcon.setImageResource(R.drawable.ic_wifi_off);\r\n                    errorMessage.setText(\"Sem conexão com a internet.\\nVerifique seu Wi-Fi.\");\r\n                } else if (lastResponseCode == 404) {\r\n                    // Erro 2: Cidade não encontrada\r\n                    errorIcon.setImageResource(R.drawable.ic_error);\r\n                    errorMessage.setText(\"Cidade não encontrada.\\nVerifique a grafia.\");\r\n                } else if (lastResponseCode >= 500) {\r\n                    // Erro 3: Erro interno do servidor\r\n                    errorIcon.setImageResource(R.drawable.ic_error);\r\n                    errorMessage.setText(\"Servidor indisponível.\\nTente novamente mais tarde.\");\r\n                } else {\r\n                    // Erro 4: Genérico\r\n                    errorIcon.setImageResource(R.drawable.ic_error);\r\n                    errorMessage.setText(\"Ocorreu um erro ao buscar os dados.\");\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    // Método para converter o JSON bruto em objetos da classe Weather\r\n    private void convertJSONtoArrayList(JSONObject forecast) {\r\n        try {\r\n            // Navega na estrutura do JSON: Array \"days\"\r\n            JSONArray list = forecast.getJSONArray(\"days\");\r\n\r\n            // Itera sobre cada dia da previsão\r\n            for (int i = 0; i < list.length(); i++) {\r\n                JSONObject day = list.getJSONObject(i);\r\n\r\n                // Extrai os campos específicos\r\n                String date = day.getString(\"date\");\r\n                double minTemp = day.getDouble(\"minTempC\");\r\n                double maxTemp = day.getDouble(\"maxTempC\");\r\n                String description = day.getString(\"description\");\r\n                double humidity = day.getDouble(\"humidity\");\r\n                String icon = day.getString(\"icon\");\r\n\r\n                // Cria o objeto Weather e adiciona à lista\r\n                weatherList.add(new Weather(date, minTemp, maxTemp, humidity, description, icon));\r\n            }\r\n        } catch (JSONException e) {\r\n            Log.e(\"API_DEBUG\", \"Erro ao ler JSON: \" + e.getMessage());\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/MainActivity.java b/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/MainActivity.java
+--- a/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/MainActivity.java	(revision dfdfe35d0f970a8f115d8bc89df8582f839eb364)
++++ b/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/MainActivity.java	(date 1765414059900)
+@@ -1,6 +1,6 @@
+ package com.example.weatherviewer;
+ 
+-// Importações necessárias para UI, Rede e Processamento de Dados
++// Importacoes necessarias para UI, Rede e Processamento de Dados
+ import android.app.AlertDialog;
+ import android.content.Context;
+ import android.os.AsyncTask;
+@@ -36,12 +36,12 @@
+ import java.util.List;
+ 
+ /**
+- * MainActivity: Classe principal que gerencia a interface do usuário e a lógica do aplicativo.
+- * Responsável por buscar a previsão do tempo e exibi-la em uma lista.
++ * MainActivity: Classe principal que gerencia a interface do usuario e a logica do aplicativo.
++ * Responsavel por buscar a previsao do tempo e exibi-la em uma lista.
+  */
+ public class MainActivity extends AppCompatActivity {
+ 
+-    // Lista que armazenará os objetos Weather (cada dia da previsão)
++    // Lista que armazenara os objetos Weather (cada dia da previsao)
+     private List<Weather> weatherList = new ArrayList<>();
+ 
+     // Adaptador para conectar a lista de dados (weatherList) ao componente visual (ListView)
+@@ -51,12 +51,12 @@
+     // Campo de texto para entrada da cidade
+     private EditText locationEditText;
+ 
+-    // Componentes da tela de erro (Layout, Mensagem e Ícone)
++    // Componentes da tela de erro (Layout, Mensagem e icone)
+     private LinearLayout errorLayout;
+     private TextView errorMessage;
+     private ImageView errorIcon;
+ 
+-    // Configurações da API (Chave e URL Base)
++    // Configuracoes da API (Chave e URL Base)
+     private final String API_KEY = BuildConfig.API_KEY;
+     private final String BASE_URL = "http://agent-weathermap-env-env.eba-6pzgqekp.us-east-2.elasticbeanstalk.com/api/weather";
+ 
+@@ -86,19 +86,19 @@
+         errorIcon = findViewById(R.id.errorIcon);
+         FloatingActionButton fab = findViewById(R.id.fab);
+ 
+-        // Inicializa o adaptador e conecta à ListView
++        // Inicializa o adaptador e conecta a ListView
+         weatherArrayAdapter = new WeatherArrayAdapter(this, weatherList);
+         weatherListView.setAdapter(weatherArrayAdapter);
+ 
+-        // Configura o ouvinte de clique do botão de pesquisa (FAB)
++        // Configura o ouvinte de clique do botao de pesquisa (FAB)
+         fab.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+-                // Obtém o texto digitado
++                // Obtem o texto digitado
+                 String city = locationEditText.getText().toString();
+ 
+                 if (!city.isEmpty()) {
+-                    // Cria a URL da requisição
++                    // Cria a URL da requisicao
+                     URL url = createURL(city);
+ 
+                     if (url != null) {
+@@ -108,7 +108,7 @@
+                         errorLayout.setVisibility(View.GONE);
+                         weatherListView.setVisibility(View.VISIBLE);
+ 
+-                        // Inicia a tarefa assíncrona para baixar os dados
++                        // Inicia a tarefa simultanea para baixar os dados
+                         new GetWeatherTask().execute(url);
+                     }
+                 } else {
+@@ -119,7 +119,7 @@
+         });
+     }
+ 
+-    // Método utilitário para esconder o teclado virtual
++    // Metodo utilitario para esconder o teclado virtual
+     private void dismissKeyboard(View view) {
+         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+         if (imm != null) {
+@@ -127,13 +127,13 @@
+         }
+     }
+ 
+-    // Método que constrói a URL formatada para a API
++    // Metodo que constroi a URL formatada para a API
+     private URL createURL(String city) {
+         try {
+-            // Codifica o nome da cidade (ex: espaços viram %20) para ser válido na URL
++            // Codifica o nome da cidade (ex: espacos viram %20) para ser valido na URL
+             String urlString = BASE_URL + "?city=" + URLEncoder.encode(city, "UTF-8")
+                     + "&days=7" // Solicita 7 dias de previsão
+-                    + "&APPID=" + API_KEY; // Adiciona a chave de autenticação
++                    + "&APPID=" + API_KEY; // Adiciona a chave de autenticacao
+             return new URL(urlString);
+         } catch (Exception e) {
+             e.printStackTrace();
+@@ -142,27 +142,27 @@
+     }
+ 
+     /**
+-     * GetWeatherTask: Classe interna para realizar operações de rede em uma Thread separada (Background).
+-     * Evita travar a interface do usuário durante o download.
++     * GetWeatherTask: Classe interna para realizar operacoes de rede em uma Thread separada (Background).
++     * Evita travar a interface do usuario durante o download.
+      */
+     private class GetWeatherTask extends AsyncTask<URL, Void, JSONObject> {
+         private AlertDialog progressDialog; // Pop-up de "Carregando..."
+ 
+-        // Variáveis de controle de erro
++        // Variaveis de controle de erro
+         private boolean isConnectionError = false;
+         private int lastResponseCode = -1;
+ 
+-        // Executado na Thread Principal ANTES do download começar
++        // Executado na Thread Principal ANTES do download comecar
+         @Override
+         protected void onPreExecute() {
+             super.onPreExecute();
+             isConnectionError = false;
+             lastResponseCode = -1;
+ 
+-            // Configura e mostra o diálogo de progresso
++            // Configura e mostra o dialogo de progresso
+             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+             builder.setMessage("Buscando previsão...");
+-            builder.setCancelable(false); // Impede cancelamento pelo usuário
++            builder.setCancelable(false); // Impede cancelamento pelo usuario
+ 
+             // Adiciona uma barra de progresso circular (spinner)
+             ProgressBar loadingSpinner = new ProgressBar(MainActivity.this);
+@@ -173,19 +173,19 @@
+             progressDialog.show();
+         }
+ 
+-        // Executado em uma Thread Secundária (Background)
++        // Executado em uma Thread Secundaria (Background)
+         @Override
+         protected JSONObject doInBackground(URL... params) {
+             HttpURLConnection connection = null;
+             try {
+-                // Abre a conexão HTTP
++                // Abre a conexao HTTP
+                 connection = (HttpURLConnection) params[0].openConnection();
+ 
+-                // Obtém o código de resposta (Ex: 200 OK, 404 Not Found)
++                // Obtem o codigo de resposta (Ex: 200 OK, 404 Not Found)
+                 lastResponseCode = connection.getResponseCode();
+                 Log.d("API_DEBUG", "Código HTTP: " + lastResponseCode);
+ 
+-                // Se a resposta for 200 (OK), lê os dados
++                // Se a resposta for 200 (OK), le os dados
+                 if (lastResponseCode == HttpURLConnection.HTTP_OK) {
+                     StringBuilder builder = new StringBuilder();
+                     try (BufferedReader reader = new BufferedReader(
+@@ -205,7 +205,7 @@
+             } catch (Exception e) {
+                 e.printStackTrace();
+             } finally {
+-                // Garante que a conexão seja fechada
++                // Garante que a conexao seja fechada
+                 if (connection != null) connection.disconnect();
+             }
+             return null;
+@@ -214,7 +214,7 @@
+         // Executado na Thread Principal DEPOIS do download terminar
+         @Override
+         protected void onPostExecute(JSONObject weather) {
+-            // Fecha o diálogo de progresso
++            // Fecha o dialogo de progresso
+             if (progressDialog != null && progressDialog.isShowing()) {
+                 progressDialog.dismiss();
+             }
+@@ -239,11 +239,11 @@
+                 errorLayout.setVisibility(View.VISIBLE);
+ 
+                 if (isConnectionError) {
+-                    // Erro 1: Falha na conexão (Internet)
++                    // Erro 1: Falha na conexao (Internet)
+                     errorIcon.setImageResource(R.drawable.ic_wifi_off);
+                     errorMessage.setText("Sem conexão com a internet.\nVerifique seu Wi-Fi.");
+                 } else if (lastResponseCode == 404) {
+-                    // Erro 2: Cidade não encontrada
++                    // Erro 2: Cidade nao encontrada
+                     errorIcon.setImageResource(R.drawable.ic_error);
+                     errorMessage.setText("Cidade não encontrada.\nVerifique a grafia.");
+                 } else if (lastResponseCode >= 500) {
+@@ -251,7 +251,7 @@
+                     errorIcon.setImageResource(R.drawable.ic_error);
+                     errorMessage.setText("Servidor indisponível.\nTente novamente mais tarde.");
+                 } else {
+-                    // Erro 4: Genérico
++                    // Erro 4: Generico
+                     errorIcon.setImageResource(R.drawable.ic_error);
+                     errorMessage.setText("Ocorreu um erro ao buscar os dados.");
+                 }
+@@ -265,11 +265,11 @@
+             // Navega na estrutura do JSON: Array "days"
+             JSONArray list = forecast.getJSONArray("days");
+ 
+-            // Itera sobre cada dia da previsão
++            // Itera sobre cada dia da previsao
+             for (int i = 0; i < list.length(); i++) {
+                 JSONObject day = list.getJSONObject(i);
+ 
+-                // Extrai os campos específicos
++                // Extrai os campos especificos
+                 String date = day.getString("date");
+                 double minTemp = day.getDouble("minTempC");
+                 double maxTemp = day.getDouble("maxTempC");
+@@ -277,7 +277,7 @@
+                 double humidity = day.getDouble("humidity");
+                 String icon = day.getString("icon");
+ 
+-                // Cria o objeto Weather e adiciona à lista
++                // Cria o objeto Weather e adiciona a lista
+                 weatherList.add(new Weather(date, minTemp, maxTemp, humidity, description, icon));
+             }
+         } catch (JSONException e) {
+Index: WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/WeatherArrayAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weatherviewer;\r\n\r\nimport android.content.Context;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.TextView;\r\nimport java.util.List;\r\n\r\npublic class WeatherArrayAdapter extends ArrayAdapter<Weather> {\r\n\r\n    // Pattern View Holder para performance (Item 7.3.5 do livro)\r\n    private static class ViewHolder {\r\n        TextView conditionIcon;\r\n        TextView dayTextView;\r\n        TextView lowTextView;\r\n        TextView hiTextView;\r\n        TextView humidityTextView;\r\n        TextView descriptionTextView;\r\n    }\r\n\r\n    public WeatherArrayAdapter(Context context, List<Weather> forecast) {\r\n        super(context, -1, forecast);\r\n    }\r\n\r\n    @Override\r\n    public View getView(int position, View convertView, ViewGroup parent) {\r\n        Weather day = getItem(position);\r\n        ViewHolder viewHolder;\r\n\r\n        if (convertView == null) {\r\n            viewHolder = new ViewHolder();\r\n            LayoutInflater inflater = LayoutInflater.from(getContext());\r\n            convertView = inflater.inflate(R.layout.list_item, parent, false);\r\n\r\n            viewHolder.conditionIcon = convertView.findViewById(R.id.conditionIcon);\r\n            viewHolder.dayTextView = convertView.findViewById(R.id.dayTextView);\r\n            viewHolder.lowTextView = convertView.findViewById(R.id.lowTextView);\r\n            viewHolder.hiTextView = convertView.findViewById(R.id.hiTextView);\r\n            viewHolder.humidityTextView = convertView.findViewById(R.id.humidityTextView);\r\n            viewHolder.descriptionTextView = convertView.findViewById(R.id.descriptionTextView);\r\n\r\n            convertView.setTag(viewHolder);\r\n        } else {\r\n            viewHolder = (ViewHolder) convertView.getTag();\r\n        }\r\n\r\n        // Preencher os dados\r\n        if (day != null) {\r\n            viewHolder.conditionIcon.setText(day.icon); // Emoji direto\r\n            viewHolder.dayTextView.setText(day.dayOfWeek);\r\n            viewHolder.lowTextView.setText(\"Min: \" + day.minTemp);\r\n            viewHolder.hiTextView.setText(\"Max: \" + day.maxTemp);\r\n            viewHolder.humidityTextView.setText(\"Hum: \" + day.humidity);\r\n            viewHolder.descriptionTextView.setText(day.description);\r\n        }\r\n\r\n        return convertView;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/WeatherArrayAdapter.java b/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/WeatherArrayAdapter.java
+--- a/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/WeatherArrayAdapter.java	(revision dfdfe35d0f970a8f115d8bc89df8582f839eb364)
++++ b/WeatherViewer/WeatherViewer/app/src/main/java/com/example/weatherviewer/WeatherArrayAdapter.java	(date 1765414059925)
+@@ -10,7 +10,6 @@
+ 
+ public class WeatherArrayAdapter extends ArrayAdapter<Weather> {
+ 
+-    // Pattern View Holder para performance (Item 7.3.5 do livro)
+     private static class ViewHolder {
+         TextView conditionIcon;
+         TextView dayTextView;
+@@ -46,9 +45,8 @@
+             viewHolder = (ViewHolder) convertView.getTag();
+         }
+ 
+-        // Preencher os dados
+         if (day != null) {
+-            viewHolder.conditionIcon.setText(day.icon); // Emoji direto
++            viewHolder.conditionIcon.setText(day.icon); 
+             viewHolder.dayTextView.setText(day.dayOfWeek);
+             viewHolder.lowTextView.setText("Min: " + day.minTemp);
+             viewHolder.hiTextView.setText("Max: " + day.maxTemp);
+Index: WeatherViewer/WeatherViewer/.idea/markdown.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/WeatherViewer/WeatherViewer/.idea/markdown.xml b/WeatherViewer/WeatherViewer/.idea/markdown.xml
+new file mode 100644
+--- /dev/null	(date 1765414059931)
++++ b/WeatherViewer/WeatherViewer/.idea/markdown.xml	(date 1765414059931)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="MarkdownSettings">
++    <option name="previewPanelProviderInfo">
++      <ProviderInfo name="Compose (experimental)" className="com.intellij.markdown.compose.preview.ComposePanelProvider" />
++    </option>
++  </component>
++</project>
+\ No newline at end of file
